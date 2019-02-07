@@ -35,7 +35,7 @@
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 
-%\usepackage{minted}
+\usepackage{minted}
 
 \usepackage{pgfplots}
 
@@ -120,7 +120,7 @@
 	\end{columns}
 \end{frame}
 
-\section{Into the details}
+\section{Into the details - glvalues}
 
 \begin{frame}{Xvalues}
 	xvalues mean: \hfill \\ \hskip3em \alert{eXpiring values}
@@ -143,29 +143,158 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{function call which result type is rvalue reference}
+\begin{frame}[fragile]{function call which result type is rvalue reference}
+	\begin{minted}{c++}
+struct Foo{};
+Foo&& bar(); 
+
+int main(){
+  bar(); // "bar()" is the xvalue expression 
+}
+	\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{explicit cast to rvalue reference}
+
+\begin{minted}{c++}
+struct Foo{/* definition */};
+
+int main() {
+  Foo a;
+  std::move(a); // "std::move(a)" casts a to Foo&&
+  static_cast<Foo&&>(a); // does same thing as std::move
+}
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile]{subscript operator call on the xvalue arrays}
+	\begin{minted}{c++}
+int main(){
+  Foo arr[10] = {};
+  std::move(arr)[0]; // xvalue ref to the first arr element
+}
+	\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{non reference member access  to the xvalue objects}
+	\begin{minted}{c++}
+template <typename T>
+struct Foo{
+T member;
+};
+
+int main(){
+  Foo<int> a{};
+  std::move(a).member; //xvalue 
+  
+  Foo<int&> a{.member = a.member};
+  std::move(a).member; // lvalue 
+                       // due to reference collapsing
+}
+	\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{non reference member access  to the xvalue objects II}
+	\begin{minted}{c++}
+int main(){
+  int Foo<int>::* pointer = &Foo<int>::member;
+  Foo<int> foo{};
+  std::move(foo).*pointer; //xvalue expression
+  return 0;
+}
+	\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{temporary materialization conversion}
+	\begin{minted}{c++}
+struct Foo{int member;};
+Foo().member; // member access requires glvalue
+              // tmc converts the prvalue to xvalue
+	\end{minted}
+\end{frame}
+
+
+\begin{frame}[fragile]{Complete type requirements}
+	\centering
+	glvalue expressions can operate on non-complete type
+	\vskip 0.5em
+	\hrule
+	
+	\begin{minted}{c++}
+struct Foo{};
+
+Foo& first_foo();
+Foo& second_foo();
+
+Foo& first_of_two(Foo& first, Foo& second){return first;}
+
+int main(){
+  auto& result = first_of_two(second_foo(), first_foo());
+  if(&result == &second_foo())
+    std::cout << "result is second" << std::endl; 
+}
+		
+	\end{minted}
+\end{frame}
+
+\begin{frame}{glvalue and void}
+	expression, which result is of type void cannot be glvalue expression.
+	\vskip 2em
+	
+	\begin{itemize}
+		\item It's impossible to create object of type void
+		\item It's impossible to have a reference to void
+	\end{itemize}
+\end{frame}
+
+\section{into the details - prvalues}
+
+\begin{frame}{What are prvalues expressions}
+	Those are expression which results are the \alert{values}.
+\end{frame}
+
+\begin{frame}[fragile]{prvalues examples}
+	\begin{minted}{c++}
+	struct Foo{};
+	Foo(); // returns value of type Foo.
+	
+	Foo bar();
+	bar(); // prvalue returns type Foo
+	\end{minted}
 	
 \end{frame}
 
-\begin{frame}{explicit cast to rvalue reference}
-
+\begin{frame}{prvalues and void}
+\centering
+	Prvalues expressions can return void type.
 \end{frame}
 
-\begin{frame}{subscript operator call on the xvalue arrays}
+\begin{frame}[fragile]{Type completeness requirements}
+	\centering
+	Prvalues expressions that yield type T needs this type to be complete.
+	\vskip 0.5em
+	\hrule
+	\vfill
 	
+	\begin{minted}{c++}
+Foo first_copy_of_two(Foo& first, Foo& second){return first;}
+		
+int main(){
+  // call to first_of_two is now prvalue expression
+  // the program will not compile
+  const auto& result = first_of_two(second_foo(),
+                                    first_foo());
+  if(&result == &second_foo())
+    std::cout << "result is second" << std::endl; 
+}
+	\end{minted}
 \end{frame}
 
-\begin{frame}{non reference member access  to the xvalue objects}
-	
+\section{Expression categories conversion}
+
+\begin{frame}{Types of categories conversions}
+	test
 \end{frame}
-
-\begin{frame}{non reference member access  to the xvalue objects II}
-
-\end{frame}
-
-\begin{frame}{temporary materialization conversion}
-
-\end{frame}
-
 
 \end{document}
