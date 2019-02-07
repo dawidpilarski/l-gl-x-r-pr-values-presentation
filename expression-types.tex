@@ -1,0 +1,171 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle, block=fill]{metropolis}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{pgfpages}
+\usepackage{pifont}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\setbeamertemplate{note page}{\insertnote}
+%\setbeameroption{show notes on second screen=left}
+\setbeameroption{hide notes}
+\definecolor{amethyst}{rgb}{0.5, 0.4, 1.0}
+\definecolor{amethystgrey}{rgb}{0.85, 0.85, 1.0}
+\definecolor{amethystdark}{rgb}{0.4, 0.3, 0.9}
+\definecolor{orangedark}{rgb}{0.0, 0.9, 0}
+%\definecolor{titlebg}{HTML}{4e8074}
+%\definecolor{titlebg}{HTML}{3e7985}
+\definecolor{titlebg}{HTML}{fbf8ff}
+\definecolor{font}{HTML}{23373b}
+%\setbeamercolor{title}{fg=amethyst, bg=amethyst}
+\setbeamercolor{frametitle}{fg= font, bg=titlebg}
+%\setbeamercolor{section title}{black}
+%\setbeamercolor{structure}{fg=amethyst, bg=amethyst}
+\setbeamercolor{progress bar}{ fg = amethyst, bg= amethystgrey }
+%\setbeamercolor{itemize item}{fg=amethyst,bg=white}
+\setbeamercolor{alerted text}{fg=amethystdark}
+%\setbeamercolor{title separator}{ ... }
+%\setbeamercolor{progress bar in head/foot}{ ... }
+%\setbeamercolor{progress bar in section page}{ ... }
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+%\usepackage{minted}
+
+\usepackage{pgfplots}
+
+\usepackage{xspace}
+
+\title{[l, gl, x, r, pr]values}
+\subtitle{Value categories}
+\date{}
+\author{Dawid Pilarski}
+\institute{dawid.pilarski@tomtom.com}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\begin{frame}{How are expressions categorized?}
+\centering
+	\includegraphics[width=\linewidth]{value_categories-1.jpg}
+\end{frame}
+
+\begin{frame}{How to understand fundamental classifications?}
+	\begin{itemize}
+		\item lvalue - T\& \pause
+		\item xvalue - T\&\& \pause
+		\item prvalue - T
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{The common mistake}
+	\centering
+	Usually people think about expression categories: \\ 
+	\vskip 3em
+	\includegraphics[width=0.5\linewidth]{value_categories-1.jpg} \\
+		\vskip 3em As categories of references, which is \alert{\color{red}wrong}
+\end{frame}
+
+\begin{frame}{Getting it right}
+	\centering
+	$$ category <=> expression $$
+	$$ reference => category $$
+	$$ category \ne > reference$$
+	
+	\vskip 3em
+	
+	\footnotesize
+	[Note: there is no reference of type prvalue]
+\end{frame}
+
+\begin{frame}{prvalue vs glvalues}
+	\begin{description}
+		\item[glvalues] \hfill \\ 
+			Generalized lvalues. It's everything that \alert{references the \emph{object}}
+		\item[prvalues] \hfill \\
+			Pure rvalues. It's a \alert{value}.
+	\end{description}
+\end{frame}
+
+\begin{frame}{Values vs Objects}
+	\begin{columns}[t]
+		\begin{column}{0.45\linewidth}
+			\centering{Objects}
+			\vskip 0.5em
+			\hrule
+			\begin{itemize}
+				\item many object with same value
+				\item object can be changed
+				\item many references to the same object
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.45\linewidth}
+			\centering{Values}
+			\vskip 0.5em
+			\hrule
+			\begin{itemize}
+				\item value is unique
+				\item value cannot be changed
+				\item value
+			\end{itemize}
+		\end{column}	
+	\end{columns}
+\end{frame}
+
+\section{Into the details}
+
+\begin{frame}{Xvalues}
+	xvalues mean: \hfill \\ \hskip3em \alert{eXpiring values}
+
+	\vskip3em
+
+	Xvalues are such kind of expressions, that its' results point to the object,
+	which will soon \alert{expire}.
+
+\end{frame}
+
+\begin{frame}{Xvalues examples}
+	There are fixed number of ways we can get xvalues:
+	\begin{itemize}
+		\item function call which result type is rvalue reference (T\&\&).
+		\item explicit cast to rvalue reference.
+		\item subscript operator call on the xvalue arrays.
+		\item non reference member access to the xvalue objects (also through pointer to member).
+		\item temporary materialization conversion.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{function call which result type is rvalue reference}
+	
+\end{frame}
+
+\begin{frame}{explicit cast to rvalue reference}
+
+\end{frame}
+
+\begin{frame}{subscript operator call on the xvalue arrays}
+	
+\end{frame}
+
+\begin{frame}{non reference member access  to the xvalue objects}
+	
+\end{frame}
+
+\begin{frame}{non reference member access  to the xvalue objects II}
+
+\end{frame}
+
+\begin{frame}{temporary materialization conversion}
+
+\end{frame}
+
+
+\end{document}
