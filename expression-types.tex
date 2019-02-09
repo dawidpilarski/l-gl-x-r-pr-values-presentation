@@ -294,7 +294,85 @@ int main(){
 \section{Expression categories conversion}
 
 \begin{frame}{Types of categories conversions}
-	test
+	\begin{columns}
+		\begin{column}[t]{0.45\linewidth}
+			\centering
+			glvalue to prvalue
+			\vskip 0.5em
+			\hrule
+			
+			\begin{itemize}
+				\item array to pointer conversion
+				\item function to pointer conversion
+				\item lvalue to rvalue
+			\end{itemize}
+			
+		\end{column}
+		\begin{column}[t]{0.45\linewidth}
+			\centering
+			prvalue to glvalue
+			\vskip 0.5em
+			\hrule
+			
+			\begin{itemize}
+				\item temporary materialization conversion
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{array to pointer conversion}
+	\begin{minted}{c++}
+void printme(const char* str);
+int main(){
+  char str[] = {'a', 'b', 'c', 'd', '\0'};
+  printme(str); 
+}
+	\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{function to pointer}
+	\begin{minted}{c++}
+void foo(){} 
+void foo2(void(*)()); 
+void foo3(void(*)()&);
+
+void main(){
+  foo; // type void(&)()
+  foo2(foo); // void(&)() -> void(*)()
+  foo3(foo); // also fine
+};
+	\end{minted}
+\end{frame}
+
+\begin{frame}{lvalue to rvalue conversion}
+	\centering
+	Does not take place for:
+	\begin{itemize}
+		\item arrays
+		\item funtions
+	\end{itemize}
+	\vskip 3em
+	For not-complete type conversion is ill-formed.
+\end{frame}
+
+\begin{frame}{lvalue to rvalue}
+	\begin{itemize}
+		\item for non class types the cv qualifiers are discarded
+		\item for class types the cv qualifiers are preserved
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{lvalue to rvalue conversion}
+	\begin{minted}{c++}
+void foo(Bar value);
+Bar bar;
+foo(bar);
+	\end{minted}
+\end{frame}
+
+\begin{frame}{temporary materialization conversion}
+	
 \end{frame}
 
 \end{document}
