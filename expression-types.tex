@@ -363,6 +363,45 @@ void main(){
 	\end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{lvalue to rvalue semantics}
+	\centering 
+	Lvalue to rvalue conversion means \alert{reading object's value} \\
+	T\& $\rightarrow$ T
+	
+	\vskip 0.5em
+	\hrule
+	\vfill
+	
+	\alert{\S 7.2.3.2 Expression context dependence }
+	\vskip 0.75em
+	
+	\begin{quote}
+		In some contexts, an expression only appears for its side effects.
+		Such an expression is called a discarded-value expression.
+		\dots \vskip 1em
+		The lvalue-to-rvalue conversion is applied if and only if the expression is a glvalue of volatile-qualified type and it is one of the following:
+	\end{quote}
+\end{frame}
+
+
+\begin{frame}[fragile]{lvalue to rvalue semantics}
+	\centering 
+	Lvalue to rvalue conversion means \alert{reading object's value} \\
+	T\& $\rightarrow$ T
+
+	\vskip 0.5em
+	\hrule
+
+	\begin{minted}{c++}
+extern volatile int GPIO_Port;	
+volatile int& foo(){ return GPIO_Port; }
+
+int main(){
+  foo();
+}
+	\end{minted}
+\end{frame}
+
 \begin{frame}[fragile]{lvalue to rvalue conversion}
 	\begin{minted}{c++}
 void foo(Bar value);
@@ -372,7 +411,67 @@ foo(bar);
 \end{frame}
 
 \begin{frame}{temporary materialization conversion}
+	\centering
+	\begin{itemize}
+		\item If glvalue expression is expected and prvalue is present.
+		\item Temporary variable is created
+		\item Conversion to the xvalue is applied.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{temporary materialization conversion}
+	\begin{minted}{c++}
+struct Foo{};	
 	
+void foo(Foo&& test){
+  std::cout << "ptr to test: " << &test << std::endl;
+}
+
+int main()
+{
+  Foo* ptr = &Foo(); // ill-formed lvalue is required
+  foo(Foo());
+}
+	\end{minted}
+\end{frame}
+
+\section{Bitfields}
+
+\begin{frame}[fragile]{Bitfields and glvalues}
+	\begin{minted}{c++}
+struct Foo{
+  char a:3;
+};
+
+Foo().a; // glvalue 
+Foo foo;
+foo.a // lvalue
+auto i = foo.a; // automatic conversion to bitfield type
+auto& j = foo.a; // ill formed
+const auto& k = foo.a; // valid statement
+
+	\end{minted}
+\end{frame}
+
+\begin{frame}{Thanks}
+	\centering
+	Thank you for attention!
+	
+	\vskip0.5em
+	
+	Questions?
+	
+	\vfill
+
+\hrule
+\vskip0.5em
+\footnotesize
+	
+	\centering Bibliography
+	\begin{itemize}
+		\item \alert{\href{blog.panicsoftware.com}{My blog}}
+		\item \alert{\href{eel.is/c++draft/}{IS draft}}
+	\end{itemize}
 \end{frame}
 
 \end{document}
