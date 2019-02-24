@@ -1,0 +1,25 @@
+[notes]
+### 1
+1. Greetings
+2. Basics - often taken wrong
+### 2
+1. The history - C & pre C++11
+2. Nowadays:
+   - glvalue, rvalue
+   fundamental classifications: lvalue, xvalue, prvalue
+### 3
+The simple way of thinking:
+return T& -> lvalue 
+return T&& -> xvalue
+return T -> prvalue
+### 6
+1.Last introductional thing is why we need those categories.
+2.Context + expression category + conversion rules = behavior
+### 7
+glvalues vs prvalues simillar to the lvalues and rvalues from the past.
+### 13
+Explain:
+1. reference vs non-reference members
+2. Designated initializer from C++20
+### 21
+Explain const auto& result, that extends the lifetime of the temporary.

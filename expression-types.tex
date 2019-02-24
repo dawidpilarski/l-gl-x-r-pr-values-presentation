@@ -322,12 +322,10 @@ int main(){
 	\begin{minted}{c++}
 void foo(){} 
 void foo2(void(*)()); 
-void foo3(void(*)()&);
 
-void main(){
+int main(){
   foo; // type void(&)() lvalue
   foo2(foo); // void(&)() -> void(*)()
-  foo3(foo); // also fine
 };
 	\end{minted}
 \end{frame}
