@@ -76,15 +76,25 @@
 
 \begin{frame}{Getting it right}
 	\centering
-	$$ category <=> expression $$
-	$$ reference => category $$
-	$$ category \ne > reference$$
+	expression \alert{belongs to} category \\
+	reference \alert{determines} category \\
+	category \alert{does not determine} reference\\
 	
-	\vskip 3em
+	\vfill
 	
 	\footnotesize
 	[Note: there is no reference of type prvalue]
 \end{frame}
+
+\begin{frame}{Why categorization?}
+Different value categories:
+\begin{itemize}
+	\item Different \alert{conversion rules}
+	\item Different \alert{requirements on types}
+	\item Different \alert{behavior}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{prvalue vs glvalues}
 	\begin{description}
@@ -95,35 +105,12 @@
 	\end{description}
 \end{frame}
 
-\begin{frame}{Values vs Objects}
-	\begin{columns}[t]
-		\begin{column}{0.45\linewidth}
-			\centering{Objects}
-			\vskip 0.5em
-			\hrule
-			\begin{itemize}
-				\item many object with same value
-				\item object can be changed
-				\item many references to the same object
-			\end{itemize}
-		\end{column}
-		\begin{column}{0.45\linewidth}
-			\centering{Values}
-			\vskip 0.5em
-			\hrule
-			\begin{itemize}
-				\item value is unique
-				\item value cannot be changed
-				\item value
-			\end{itemize}
-		\end{column}	
-	\end{columns}
-\end{frame}
-
 \section{Into the details - glvalues}
 
 \begin{frame}{Xvalues}
-	xvalues mean: \hfill \\ \hskip3em \alert{eXpiring values}
+	\begin{description}
+		\item[xvalues] - eXpiring values
+	\end{description}
 
 	\vskip3em
 
@@ -181,16 +168,16 @@ int main(){
 	\begin{minted}{c++}
 template <typename T>
 struct Foo{
-T member;
+  T member;
 };
 
 int main(){
   Foo<int> a{};
   std::move(a).member; //xvalue 
   
-  Foo<int&> a{.member = a.member};
-  std::move(a).member; // lvalue 
-                       // due to reference collapsing
+  Foo<int&> b{.member = a.member};
+  std::move(b).member; // lvalue 
+                       // (reference collapsing)
 }
 	\end{minted}
 \end{frame}
@@ -222,7 +209,7 @@ Foo().member; // member access requires glvalue
 	\hrule
 	
 	\begin{minted}{c++}
-struct Foo{};
+struct Foo;
 
 Foo& first_foo();
 Foo& second_foo();
@@ -338,7 +325,7 @@ void foo2(void(*)());
 void foo3(void(*)()&);
 
 void main(){
-  foo; // type void(&)()
+  foo; // type void(&)() lvalue
   foo2(foo); // void(&)() -> void(*)()
   foo3(foo); // also fine
 };
@@ -350,7 +337,7 @@ void main(){
 	Does not take place for:
 	\begin{itemize}
 		\item arrays
-		\item funtions
+		\item functions
 	\end{itemize}
 	\vskip 3em
 	For not-complete type conversion is ill-formed.
