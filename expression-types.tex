@@ -217,7 +217,7 @@ Foo& second_foo();
 Foo& first_of_two(Foo& first, Foo& second){return first;}
 
 int main(){
-  auto& result = first_of_two(second_foo(), first_foo());
+  auto& result = first_copy_of_two(second_foo(), first_foo());
   if(&result == &second_foo())
     std::cout << "result is second" << std::endl; 
 }
@@ -312,6 +312,7 @@ int main(){
 	\begin{minted}{c++}
 void printme(const char* str);
 int main(){
+  //char(&)[5] type	
   char str[] = {'a', 'b', 'c', 'd', '\0'};
   printme(str); 
 }
